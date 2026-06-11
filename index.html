@@ -184,12 +184,12 @@
       </button>
     </div>
 
-    <main id="chat-container" class="flex-1 overflow-y-auto bg-slate-100 dark:bg-slate-950 px-4 py-8 md:p-8 scroll-smooth transition-colors duration-500">
+    <main id="chat-container" class="flex-1 overflow-y-auto bg-slate-100 dark:bg-slate-950 px-4 py-8 md:p-8 scroll-smooth transition-colors duration-500 font-sans">
       <div class="max-w-3xl mx-auto space-y-6" id="chat-list">
         </div>
     </main>
 
-    <footer class="flex-none h-24 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center px-6 md:px-10 justify-between gap-4 z-20 transition-colors duration-500 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-none">
+    <footer class="flex-none h-24 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center px-6 md:px-10 justify-between gap-4 z-20 transition-colors duration-500 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-none font-sans">
       
       <div class="flex items-center space-x-2 md:space-x-4">
         <button 
@@ -229,7 +229,7 @@
 
       <div class="flex-1 max-w-xl hidden md:block">
         <div class="flex justify-between items-center mb-2">
-          <span id="status-text" class="text-[11px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+          <span id="status-text" class="text-[11px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-sans">
             Paused
           </span>
           <span id="segment-counter" class="text-[11px] font-mono text-slate-400">
@@ -273,6 +273,28 @@
     
   </div>
 
+  <!-- Interactive Simulation Modal Layout -->
+  <div id="physics-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="physics-modal-content" class="relative w-[90%] max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xl transition-transform duration-300 scale-95 select-none">
+      <button id="btn-close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <h3 id="modal-title" class="text-base font-bold text-slate-800 dark:text-slate-100 mb-1.5">Simulation Model</h3>
+      <p id="modal-desc" class="text-xs text-slate-500 dark:text-slate-400 mb-4 font-medium leading-relaxed">Explanation of the simulation details.</p>
+      
+      <div class="relative w-full h-[300px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800/80 shadow-inner">
+        <canvas id="modal-canvas" class="block w-full h-full cursor-crosshair"></canvas>
+      </div>
+      
+      <div class="mt-4 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+        <span class="font-semibold text-slate-500 dark:text-slate-500 uppercase tracking-wider">Click inside canvas to interact</span>
+        <span id="modal-cooldown" class="text-indigo-500 dark:text-indigo-400 font-bold uppercase tracking-wider">Closing in 5s of inactivity...</span>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Embedded conversation from conversation.ts
     const conversation = [
@@ -294,7 +316,7 @@
       {
         id: 3,
         speaker: 'Gemini',
-        text: "At its core, Albert Einstein’s Theory of General Relativity (published in 1915) is a theory of gravity. But instead of viewing gravity as an invisible pulling force between objects, the way Isaac Newton did, Einstein realized that gravity is actually the warping or bending of the fabric of space and time.\n\nTo understand how it works, we have to look at the universe through Einstein's eyes, breaking it down into a few foundational concepts.\n\n### 1. The Fabric: Spacetime\nBefore Einstein, people thought of space as an empty, unchanging stage where events happened, and time as a clock ticking at the exact same rate everywhere in the universe.\nEinstein merged them into a single, four-dimensional continuum called spacetime (three dimensions of space, one dimension of time). He realized that spacetime isn't an empty stage; it is flexible, dynamic, and can be stretched, twisted, and bent.\n\n### 2. Gravity as Geometry (The Trampoline Analogy)\nTo visualize general relativity, imagine a tightly stretched trampoline.\n* If you place a heavy bowling ball in the center, it creates a deep dip or sag in the fabric.\n* If you then roll a small marble across the trampoline, it won't move in a straight line. It will roll down into the dip and orbit around the bowling ball.\n\nIn the universe, the bowling ball is a massive object like the Sun, and the marble is Earth. The Sun doesn't \"pull\" on the Earth with an invisible rope; the Sun's mass warps the spacetime around it, and the Earth is simply following the straightest possible path through that curved space.\n\nAs physicist John Wheeler famously summarized: \"Matter tells spacetime how to curve; spacetime tells matter how to move.\"\n\n### 3. The Math: The Einstein Field Equations\nFor those who appreciate the mathematical elegance, Einstein captured this entire relationship in a remarkably concise set of equations. While it looks like a single equation, it is actually a system of 10 interconnected tensor equations. Here is what the pieces mean:\n* **The Left Side:** Describes the geometry of spacetime (its curvature, shape, and cosmic expansion).\n* **The Right Side:** Describes the energy and momentum present (the matter, radiation, and pressure causing the warping).\n* **The Constants:** Newton's gravitational constant G and the speed of light c. Because the speed of light is so massive, this fraction is incredibly small. This tells us that spacetime is incredibly rigid; it takes a massive amount of energy or matter (like a star or a black hole) to warp it noticeably.\n\n### 4. Mind-Bending Consequences of the Theory\nBecause space and time are linked, warping space also warps time. General relativity predicted several wild phenomena that have all since been proven true:\n* **Gravitational Time Dilation:** Time passes slower in stronger gravitational fields. A clock on the surface of Earth ticks slightly slower than a clock floating in deep space.\n* **Gravitational Lensing:** Because space is curved, light traveling past a massive object, like a galaxy cluster, gets bent. The galaxy acts like a giant magnifying glass, distorting and multiplying the image of stars behind it.\n* **Black Holes:** If you pack enough mass into a small enough space, the warp in spacetime becomes a bottomless pit. Not even light can escape its gravitational curve.\n* **Gravitational Waves:** When massive objects accelerate (like two black holes colliding), they create ripples in the fabric of spacetime itself, traveling across the universe like ripples on a pond. We detected these for the first time in 2015.\n\nDoes the geometry of spacetime make sense, or would you like to dive deeper into one of its specific consequences, like how time slows down near a black hole?"
+        text: "At its core, Albert Einstein’s Theory of General Relativity (published in 1915) is a theory of gravity. But instead of viewing gravity as an invisible pulling force between objects, the way Isaac Newton did, Einstein realized that gravity is actually the warping or bending of the fabric of space and time.\n\nTo understand how it works, we have to look at the universe through Einstein's eyes, breaking it down into a few foundational concepts.\n\n### 1. The Fabric: Spacetime\nBefore Einstein, people thought of space as an empty, unchanging stage where events happened, and time as a clock ticking at the exact same rate everywhere in the universe.\nEinstein merged them into a single, four-dimensional continuum called spacetime (three dimensions of space, one dimension of time). He realized that spacetime isn't an empty stage; it is flexible, dynamic, and can be stretched, twisted, and bent.\n\n### 2. Gravity as Geometry (The Trampoline Analogy)\nTo visualize general relativity, imagine a tightly stretched trampoline.\n* If you place a heavy bowling ball in the center, it creates a deep dip or sag in the fabric.\n* If you then roll a small marble across the trampoline, it won't move in a straight line. It will roll down into the dip and orbit around the bowling ball.\n\nIn the universe, the bowling ball is a massive object like the Sun, and the marble is Earth. The Sun doesn't \"pull\" on the Earth with an invisible rope; the Sun's mass warps the spacetime around it, and the Earth is simply following the straightest possible path through that curved space.\n\nAs physicist John Wheeler famously summarized: \"Matter tells spacetime how to curve; spacetime tells matter how to move.\"\n\n### 3. The Math: The Einstein Field Equations\nFor those who appreciate the mathematical elegance, Einstein captured this entire relationship in a remarkably concise set of equations. While it looks like a single equation, it is actually a system of 10 interconnected tensor equations:\n\n<div class=\"my-4 font-mono text-xs bg-slate-100 dark:bg-slate-900/80 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 overflow-x-auto flex items-center justify-center select-all shadow-sm\"><span class=\"text-sm mr-2 font-bold\">G<sub>μν</sub> + Λg<sub>μν</sub> =</span> <div class=\"inline-block text-center align-middle mx-1 text-sm font-bold\"><span class=\"block border-b border-indigo-600 dark:border-indigo-400 pb-0.5 px-2\">8&pi;G</span><span class=\"block pt-0.5\">c<sup>4</sup></span></div> <span class=\"text-sm ml-2 font-bold\">T<sub>μν</sub></span></div>\n\nHere is what the pieces mean:\n* **The Left Side (Geometry):** Describes the geometry of spacetime (its curvature, shape, and cosmic expansion).\n* **The Right Side (Energy):** Describes the energy and momentum present (the matter, radiation, and pressure causing the warping).\n* **The Constants (G and c):** Newton's gravitational constant G and the speed of light c. Because the speed of light is so massive, this fraction is incredibly small. This tells us that spacetime is incredibly rigid; it takes a massive amount of energy or matter (like a star or a black hole) to warp it noticeably.\n\n### 4. Mind-Bending Consequences of the Theory\nBecause space and time are linked, warping space also warps time. General relativity predicted several wild phenomena that have all since been proven true:\n* **Gravitational Time Dilation:** Time passes slower in stronger gravitational fields. A clock on the surface of Earth ticks slightly slower than a clock floating in deep space.\n* **Gravitational Lensing:** Because space is curved, light traveling past a massive object, like a galaxy cluster, gets bent. The galaxy acts like a giant magnifying glass, distorting and multiplying the image of stars behind it.\n* **Black Holes:** If you pack enough mass into a small enough space, the warp in spacetime becomes a bottomless pit. Not even light can escape its gravitational curve.\n* **Gravitational Waves:** When massive objects accelerate (like two black holes colliding), they create ripples in the fabric of spacetime itself, traveling across the universe like ripples on a pond. We detected these for the first time in 2015.\n\nDoes the geometry of spacetime make sense, or would you like to dive deeper into one of its specific consequences, like how time slows down near a black hole?"
       },
       {
         id: 4,
@@ -304,7 +326,7 @@
       {
         id: 5,
         speaker: 'Gemini',
-        text: "When you move away from standard Newtonian physics and enter Einstein's universe, reality starts to behave less like a rigid grid and more like fluid geometry.\n\nHere is a deeper dive into the most profound, mind-bending consequences of General Relativity.\n\n### 1. Gravitational Time Dilation (Time is Relative)\nIn General Relativity, time is not a universal constant. It is elastic. Because space and time are woven together as \"spacetime,\" whenever mass warps space, it stretching and slows down time as well.\nThe stronger the gravitational pull (the closer you are to a massive object), the slower time passes relative to someone in a weaker gravitational field.\n* **The Extreme Example:** If you were to hover just outside the event horizon of a supermassive black hole for what felt like one hour to you, back on Earth, decades or even centuries could pass. You would essentially fast-forward into the future of the universe.\n* **The Everyday Example:** This isn't just science fiction; it affects technology we use every day. Earth's gravity is slightly weaker up where GPS satellites orbit than it is down on the surface. Because of this, satellite clocks run about 45 microseconds faster per day than clocks on the ground. Engineers have to deliberately program relativity equations into GPS software to slow the satellite clocks down, or your phone's navigation map would drift out of alignment by miles every single day.\n\n### 2. Gravitational Lensing (Nature's Cosmic Magnifying Glass)\nWe usually think of light traveling in a perfectly straight line. But if light passes by an incredibly massive object, like a cluster of thousands of galaxies, it encounters a massive dip in spacetime. The light follows the curve of that dip, bending as it travels.\nThis creates a phenomenon called gravitational lensing. The massive foreground object acts exactly like a giant glass lens in a telescope.\n* It magnifies and distorts the light of objects sitting directly behind it.\n* Sometimes, it splits the light of a single distant galaxy into multiple images, or smears it into a perfect glowing ring of light known as an Einstein Ring.\n* Astronomers use this consequence today to map out dark matter, seeing the invisible mass by observing how dramatically it warps the light passing through it.\n\n### 3. Black Holes and Singularity (The Point of No Return)\nEinstein’s equations showed that if you pack enough mass into a tight enough space, the gravity becomes so intense that the escape velocity required to break free exceeds the speed of light. Since nothing can travel faster than light, nothing, not even light itself, can escape. This is a black hole.\n* **The Event Horizon:** This is the literal boundary of the black hole. Think of it less as a physical surface and more as a crossing point. Once an object passes the event horizon, all paths through warped spacetime twist inward. Moving \"outward\" becomes as physically impossible as moving \"backward in time.\"\n* **The Singularity:** At the very center of a black hole, the mathematics of General Relativity suggest that matter is crushed into an infinitely small point with infinite density. At this point, the curvature of spacetime becomes infinite. When equations return \"infinity,\" it means our current understanding of physics has completely broken down. To truly solve what happens at the center, relativity must eventually be married with quantum mechanics.\n\n### 4. Gravitational Waves (Ripples in Reality)\nIf you accelerate a charge in an electric field, you get electromagnetic waves (light, radio waves, X-rays). Einstein predicted that the same thing should happen with gravity. If you violently accelerate massive objects, they should shake the very fabric of spacetime, sending out literal ripples through the universe at the speed of light.\nFor a century, this was entirely theoretical because spacetime is incredibly rigid; it takes an unfathomable amount of energy to make it ripple noticeably.\nHowever, in 2015, the LIGO (Laser Interferometer Gravitational-Wave Observatory) experiment detected them for the first time. Two massive black holes, millions of light-years away, spiraled into each other and collided. The resulting gravitational waves traveled across the cosmos and physically stretched and compressed the Earth by a fraction of the width of an atomic nucleus as they passed through us. We didn't see this event with light; we felt the fabric of space vibrate.\n\n### 5. Frame Dragging (The Cosmic Whirlpool)\nThink back to the trampoline analogy, but imagine the heavy bowling ball is also spinning incredibly fast. As it spins, the friction of its surface would catch the fabric of the trampoline and twist it into a spiral whirlpool.\nThis happens in real life. It’s called frame dragging (or the Lense-Thirring effect). Any massive, rotating object literally drags the very fabric of space and time around with it. If you were orbiting a rapidly spinning black hole, space itself would be moving so violently that even if you fired your rockets at maximum power in the opposite direction, you would still be swept backward in the direction of the spin. Space itself forces your trajectory.\n\nOf all these wild distortions of space and time, which one feels the most counterintuitive to you?"
+        text: "When you move away from standard Newtonian physics and enter Einstein's universe, reality starts to behave less like a rigid grid and more like fluid geometry.\n\nHere is a deeper dive into the most profound, mind-bending consequences of General Relativity.\n\n### 1. Gravitational Time Dilation (Time is Relative)\nIn General Relativity, time is not a universal constant. It is elastic. Because space and time are woven together as \"spacetime,\" whenever mass warps space, it stretching and slows down time as well.\nThe stronger the gravitational pull (the closer you are to a massive object), the slower time passes relative to someone in a weaker gravitational field.\n* **The Extreme Example:** If you were to hover just outside the event horizon of a supermassive black hole for what felt like one hour to you, back on Earth, decades or even centuries could pass. You would essentially fast-forward into the future of the universe.\n* **The Everyday Example:** This isn't just science fiction; it affects technology we use every day. Earth's gravity is slightly weaker up where GPS satellites orbit than it is down on the surface. Because of this, satellite clocks run about 45 microseconds faster per day than clocks on the ground. Engineers have to deliberately program relativity equations into GPS software to slow the satellite clocks down, or your phone's navigation map would drift out of alignment by miles every single day.\n\n### 2. Gravitational Lensing (Nature's Cosmic Magnifying Glass)\nWe usually think of light traveling in a perfectly straight line. But if light passes by an incredibly massive object, like a cluster of thousands of galaxies, it encounters a massive dip in spacetime. The light follows the curve of that dip, bending as it travels.\nThis creates a phenomenon called gravitational lensing. The massive foreground object acts exactly like a giant glass lens in a telescope.\n* It magnifies and distorts the light of objects sitting directly behind it.\n* Sometimes, it splits the light of a single distant galaxy into multiple images, or smears it into a perfect glowing ring of light known as an Einstein Ring.\n* Astronomers use this consequence today to map out dark matter, seeing the invisible mass by observing how dramatically it warps the light passing through it.\n\n### 3. Black Holes and Singularity (The Point of No Return)\nEinstein’s equations showed that if you pack enough mass into a tight enough space, the gravity becomes so intense that the escape velocity required to break free exceeds the speed of light. Since nothing can travel faster than light, nothing, not even light itself, can escape. This is a black hole.\n\nWe can calculate the boundary point where gravity curves spacetime to the point of no return—historically mapped by the following model:\n\n<div class=\"equation-card cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 my-4 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/30 hover:shadow-md select-none text-center\" data-equation=\"schwarzschild\" data-title=\"The Schwarzschild Radius Event Horizon\" data-desc=\"This simulation visualizes particles orbiting in an accretion disk and experiencing gravity vector pull towards a central singularity. Crossing the event horizon boundary R<sub>s</sub> results in gravitational collapse.\">\n  <span class=\"block text-[9px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest mb-1.5\">Interactive Physics Model</span>\n  <h4 class=\"text-sm font-bold text-slate-900 dark:text-white mb-2\">The Schwarzschild Radius</h4>\n  <div class=\"flex items-center justify-center font-mono text-indigo-600 dark:text-indigo-400 py-2.5\">\n    <span class=\"text-xl font-bold mr-2\">R<sub>s</sub> =</span>\n    <div class=\"inline-block text-center align-middle text-lg font-bold\">\n      <span class=\"block border-b border-indigo-600 dark:border-indigo-400 pb-0.5 px-4\">2GM</span>\n      <span class=\"block pt-0.5\">c<sup>2</sup></span>\n    </div>\n  </div>\n  <div class=\"text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-1.5 flex items-center justify-center gap-1.5 font-semibold\">\n    <span class=\"inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse\"></span>\n    Click to open simulation modal\n  </div>\n</div>\n\n* **The Event Horizon:** This is the literal boundary of the black hole. Think of it less as a physical surface and more as a crossing point. Once an object passes the event horizon, all paths through warped spacetime twist inward. Moving \"outward\" becomes as physically impossible as moving \"backward in time.\"\n* **The Singularity:** At the very center of a black hole, the mathematics of General Relativity suggest that matter is crushed into an infinitely small point with infinite density. At this point, the curvature of spacetime becomes infinite. When equations return \"infinity,\" it means our current understanding of physics has completely broken down. To truly solve what happens at the center, relativity must eventually be married with quantum mechanics.\n\n### 4. Gravitational Waves (Ripples in Reality)\nIf you accelerate a charge in an electric field, you get electromagnetic waves (light, radio waves, X-rays). Einstein predicted that the same thing should happen with gravity. If you violently accelerate massive objects, they should shake the very fabric of spacetime, sending out literal ripples through the universe at the speed of light.\nFor a century, this was entirely theoretical because spacetime is incredibly rigid; it takes an unfathomable amount of energy to make it ripple noticeably.\nHowever, in 2015, the LIGO (Laser Interferometer Gravitational-Wave Observatory) experiment detected them for the first time. Two massive black holes, millions of light-years away, spiraled into each other and collided. The resulting gravitational waves traveled across the cosmos and physically stretched and compressed the Earth by a fraction of the width of an atomic nucleus as they passed through us. We didn't see this event with light; we felt the fabric of space vibrate.\n\n### 5. Frame Dragging (The Cosmic Whirlpool)\nThink back to the trampoline analogy, but imagine the heavy bowling ball is also spinning incredibly fast. As it spins, the friction of its surface would catch the fabric of the trampoline and twist it into a spiral whirlpool.\nThis happens in real life. It’s called frame dragging (or the Lense-Thirring effect). Any massive, rotating object literally drags the very fabric of space and time around with it. If you were orbiting a rapidly spinning black hole, space itself would be moving so violently that even if you fired your rockets at maximum power in the opposite direction, you would still be swept backward in the direction of the spin. Space itself forces your trajectory.\n\nOf all these wild distortions of space and time, which one feels the most counterintuitive to you?"
       },
       {
         id: 6,
@@ -314,7 +336,7 @@
       {
         id: 7,
         speaker: 'Gemini',
-        text: "The Simulation Hypothesis, the idea popularized by philosopher Nick Bostrom that we might be living in a high-fidelity virtual ancestor simulation, intersects with Albert Einstein’s Theory of General Relativity in some incredibly fascinating ways.\n\nIf this universe is software, then the laws of physics are the source code. When programmers and physicists look at Einstein’s equations through the lens of computer science, they notice that the rules of relativity look a lot like clever optimization tricks, hardware limits, and rendering techniques you would use to build a massive, efficient simulation.\n\n### 1. The Speed of Light as a Hardware Processor Limit\nIn relativity, the speed of light is the absolute speed limit of the universe. Nothing can travel or transmit information faster than c (approximately 300,000 km/s).\nIf you were programming a universe, you would run into a massive problem: how do you calculate the interactions of trillions of objects simultaneously without crashing the system? You need a maximum clock speed.\n* In a simulation, the speed of light isn't a magical cosmic speed limit; it's the maximum processor speed of the host computer.\n* Information can only update across the grid at one pixel per clock cycle. The speed of light is literally the refresh rate of our spacetime fabric.\n\n### 2. Time Dilation as \"Lag\" under Heavy Computational Load\nAs we discussed, General Relativity proves that mass warps spacetime, and time slows down near massive objects (like black holes) or at extreme velocities.\nFrom a computer science perspective, this looks exactly like server lag.\n* When a rendering engine handles an area with an immense amount of data, like a black hole, where massive amounts of matter, energy, and gravitational calculations are crammed into a single point, the processing power required for that specific region skyrockets.\n* To prevent the host computer from crashing, the simulation slows down the local clock for that specific area. To an observer inside that high-mass zone, everything feels normal. But to the rest of the universe, that specific region is processing data at a much slower frame rate.\n\n### 3. The Rigidly Smooth Math vs. The \"Pixelated\" Universe\nThere is a massive, ongoing debate in modern physics that directly ties relativity to the simulation theory.\nEinstein’s General Relativity relies on a concept called smooth spacetime geometry. His equations assume that space and time are continuous, meaning you can divide a distance down infinitely into smaller and smaller pieces.\nHowever, computers cannot handle infinity. A computer requires a grid made of discrete bits, or \"pixels.\" If our universe is a simulation, there must be a minimum resolution. Physics actually has a theoretical candidate for this: The Planck Length (1.6 x 10^-35 meters) and The Planck Time (5.4 x 10^-44 seconds).\nIf space and time are found to be \"chunked\" or pixelated at the Planck scale, it would break Einstein's assumption of perfectly smooth geometry, but it would be a smoking gun for a digital, simulated reality.\n\n### 4. Gravitational Lensing and \"Frustum Culling\"\nIn video game development, programmers use a technique called frustum culling or lazy loading. The game engine only renders the graphics that the player is actively looking at. If you turn around, the world behind you disappears or drops in resolution to save memory.\nIn our universe, look at Gravitational Lensing. As light travels through empty space across billions of light-years, it doesn't bother interacting or calculating its final form until it hits a massive gravitational warp or an observer's telescope. The universe bends the light dynamically based on the geometry it encounters along the way. It’s an incredibly efficient way to distribute light paths across vast distances without needing to pre-render the exact path of every photon in the cosmos.\n\n### The Ultimate Computational Catch: Vazza’s Energy Limit\nWhile these connections are mind-bending, relativity also provides the harshest argument against the simulation theory.\nIn 2025, an Italian astrophysicist named Franco Vazza calculated the sheer amount of information storage required to simulate the universe using the laws of relativity and thermodynamics. He found that to simulate even a small, low-resolution patch of our universe using our current understanding of physics, the creators would need to harness an astronomical amount of energy, essentially turning the mass of entire galaxy clusters into a giant computer.\nUnless the \"host universe\" operates on entirely different, unimaginable laws of physics where energy is infinite, Einstein's equations suggest that rendering our reality down to the atomic level is a monumentally expensive task.\n\nDoes looking at relativity as software architecture change how you think about things like time slowing down or the speed of light?"
+        text: "The Simulation Hypothesis, the idea popularized by philosopher Nick Bostrom that we might be living in a high-fidelity virtual ancestor simulation, intersects with Albert Einstein’s Theory of General Relativity in some incredibly fascinating ways.\n\nIf this universe is software, then the laws of physics are the source code. When programmers and physicists look at Einstein’s equations through the lens of computer science, they notice that the rules of relativity look a lot like clever optimization tricks, hardware limits, and rendering techniques you would use to build a massive, efficient simulation.\n\n### 1. The Speed of Light as a Hardware Processor Limit\nIn relativity, the speed of light is the absolute speed limit of the universe. Nothing can travel or transmit information faster than c (approximately 300,000 km/s).\nIf you were programming a universe, you would run into a massive problem: how do you calculate the interactions of trillions of objects simultaneously without crashing the system? You need a maximum clock speed.\n* In a simulation, the speed of light isn't a magical cosmic speed limit; it's the maximum processor speed of the host computer.\n* Information can only update across the grid at one pixel per clock cycle. The speed of light is literally the refresh rate of our spacetime fabric.\n\n### 2. Time Dilation as \"Lag\" under Heavy Computational Load\nAs we discussed, General Relativity proves that mass warps spacetime, and time slows down near massive objects (like black holes) or at extreme velocities.\nFrom a computer science perspective, this looks exactly like server lag.\n* When a rendering engine handles an area with an immense amount of data, like a black hole, where massive amounts of matter, energy, and gravitational calculations are crammed into a single point, the processing power required for that specific region skyrockets.\n* To prevent the host computer from crashing, the simulation slows down the local clock for that specific area. To an observer inside that high-mass zone, everything feels normal. But to the rest of the universe, that specific region is processing data at a much slower frame rate.\n\n### 3. The Rigidly Smooth Math vs. The \"Pixelated\" Universe\nThere is a massive, ongoing debate in modern physics that directly ties relativity to the simulation theory.\nEinstein’s General Relativity relies on a concept called smooth spacetime geometry. His equations assume that space and time are continuous, meaning you can divide a distance down infinitely into smaller and smaller pieces.\nHowever, computers cannot handle infinity. A computer requires a grid made of discrete bits, or \"pixels.\" If our universe is a simulation, there must be a minimum resolution. Physics actually has a theoretical candidate for this—the Planck scale constant models:\n\n<div class=\"equation-card cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 my-4 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/30 hover:shadow-md select-none text-center\" data-equation=\"planck\" data-title=\"The Planck Scale Model\" data-desc=\"This simulation renders space-time as discrete quantized cells rather than infinitely smooth fabric. Quantum foam fluctuations pop in and out of active configuration states at Planck time frequencies.\">\n  <span class=\"block text-[9px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest mb-1.5\">Interactive Physics Model</span>\n  <h4 class=\"text-sm font-bold text-slate-900 dark:text-white mb-2\">Planck Scale Constants</h4>\n  <div class=\"grid grid-cols-2 gap-4 py-2 max-w-md mx-auto items-center\">\n    <div class=\"flex flex-col items-center justify-center border-r border-slate-200 dark:border-slate-800 pr-2\">\n      <span class=\"text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1 font-bold\">Planck Length Model</span>\n      <div class=\"flex items-center justify-center font-mono text-indigo-600 dark:text-indigo-400 text-lg font-bold py-1.5\">\n        <span>&ell;<sub>p</sub> = &radic;</span>\n        <div class=\"inline-block text-center align-middle text-xs font-bold ml-1\">\n          <span class=\"block border-b border-indigo-600 dark:border-indigo-400 pb-0.5 px-2.5\">&hbar;G</span>\n          <span class=\"block pt-0.5\">c<sup>3</sup></span>\n        </div>\n      </div>\n    </div>\n    <div class=\"flex flex-col items-center justify-center pl-2\">\n      <span class=\"text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1 font-bold\">Planck Time Model</span>\n      <div class=\"flex items-center justify-center font-mono text-indigo-600 dark:text-indigo-400 text-lg font-bold py-1.5\">\n        <span>t<sub>p</sub> = &radic;</span>\n        <div class=\"inline-block text-center align-middle text-xs font-bold ml-1\">\n          <span class=\"block border-b border-indigo-600 dark:border-indigo-400 pb-0.5 px-2.5\">&hbar;G</span>\n          <span class=\"block pt-0.5\">c<sup>5</sup></span>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-2.5 flex items-center justify-center gap-1.5 font-semibold\">\n    <span class=\"inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse\"></span>\n    Click to open simulation modal\n  </div>\n</div>\n\nIf space and time are found to be \"chunked\" or pixelated at the Planck scale, it would break Einstein's assumption of perfectly smooth geometry, but it would be a smoking gun for a digital, simulated reality.\n\n### 4. Gravitational Lensing and \"Frustum Culling\"\nIn video game development, programmers use a technique called frustum culling or lazy loading. The game engine only renders the graphics that the player is actively looking at. If you turn around, the world behind you disappears or drops in resolution to save memory.\nIn our universe, look at Gravitational Lensing. As light travels through empty space across billions of light-years, it doesn't bother interact or calculating its final form until it hits a massive gravitational warp or an observer's telescope. The universe bends the light dynamically based on the geometry it encounters along the way. It’s an incredibly efficient way to distribute light paths across vast distances without needing to pre-render the exact path of every photon in the cosmos.\n\n### The Ultimate Computational Catch: Vazza’s Energy Limit\nWhile these connections are mind-bending, relativity also provides the harshest argument against the simulation theory.\nIn 2025, an Italian astrophysicist named Franco Vazza calculated the sheer amount of information storage required to simulate the universe using the laws of relativity and thermodynamics. To mathematically measure the thermodynamic limit of computing, we look at **Landauer's Principle**, which establishes the minimum hardware heat generation requirement per erased/overwritten bit:\n\n<div class=\"equation-card cursor-pointer border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 my-4 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/30 hover:shadow-md select-none text-center\" data-equation=\"landauer\" data-title=\"Landauer's Thermodynamic Limit\" data-desc=\"This simulation visualizes physical logic state transitions (compressing logical 1 state to 0 state). This action results in thermodynamic entropy erasure, releasing the mandatory E<sub>min</sub> heat dissipation value.\">\n  <span class=\"block text-[9px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-widest mb-1.5\">Interactive Physics Model</span>\n  <h4 class=\"text-sm font-bold text-slate-900 dark:text-white mb-2\">Landauer's Thermodynamic Limit</h4>\n  <div class=\"flex items-center justify-center font-mono text-indigo-600 dark:text-indigo-400 py-3\">\n    <span class=\"text-xl font-bold mr-2.5\">E<sub>min</sub> =</span>\n    <span class=\"text-xl font-bold\">k<sub>B</sub> · T · ln(2)</span>\n  </div>\n  <div class=\"text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-2.5 flex items-center justify-center gap-1.5 font-semibold\">\n    <span class=\"inline-block w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse\"></span>\n    Click to open simulation modal\n  </div>\n</div>\n\nHe found that to simulate even a small, low-resolution patch of our universe using our current understanding of physics, the creators would need to harness an astronomical amount of energy, essentially turning the mass of entire galaxy clusters into a giant computer.\nUnless the \"host universe\" operates on entirely different, unimaginable laws of physics where energy is infinite, Einstein's equations suggest that rendering our reality down to the atomic level is a monumentally expensive task.\n\nDoes looking at relativity as software architecture change how you think about things like time slowing down or the speed of light?"
       },
       {
         id: 8,
@@ -324,7 +346,7 @@
       {
         id: 9,
         speaker: 'Gemini',
-        text: "The short answer is yes, absolutely. Both theoretical physics and philosophy suggest that dimensions beyond our familiar four (three of space, one of time) could easily exist. In fact, some of our most advanced mathematical models require them to function.\n\nHowever, when it comes to fathoming them or imagining entities living inside them, we run straight into the hard biological limits of the human brain. To understand how this works, we have to look at how physics constructs these dimensions, and how we can use lower dimensions to map out the higher ones.\n\n### 1. Do Extra Dimensions Exist? (What Physics Says)\nEinstein’s General Relativity showed us that spacetime is a flexible, four-dimensional fabric. But Einstein stopped at four. Later physicists realized that if you add more spatial dimensions, the laws of nature become much easier to unify.\n\n**String Theory and Hidden Dimensions**\nIn String Theory, the leading candidate for a \"Theory of Everything\" that tries to merge relativity with quantum mechanics, the universe doesn't have 4 dimensions. It has 11 dimensions (10 of space, 1 of time).\n\nWhy can't we see them? physicists suggest two main possibilities:\n* **They are compacted (The Garden Hose Analogy):** Imagine looking at a garden hose from a mile away. It looks like a one-dimensional line. But if you walk up close, you realize it has a second dimension: circumference. An ant can walk around the hose. String theory suggests the extra 7 spatial dimensions are curled up so incredibly small (at the Planck scale) that we simply cannot perceive them.\n* **We are trapped on a \"Brane\" (The Paper Analogy):** Another theory, called Brane Cosmology, suggests that our entire 4D universe is just a flat sheet of paper (a \"membrane\" or brane) floating inside a much larger, higher-dimensional bulk space. Just as a drawing on a page can't lift itself off the paper, we are trapped on our 4D slice of reality.\n\n### 2. Can We Understand or Fathom Them?\nBiologically, your brain evolved to survive in a 3D environment. You cannot truly visualize a 4D spatial object. If you try to imagine a direction that is perpendicular to length, width, and height simultaneously, your brain short-circuits.\n\n**The Flatland Concept**\nTo fathom how a higher dimension interacts with us, we use a famous thought experiment from the 1884 novella Flatland. Imagine a universe that is a flat, 2D sheet of paper, inhabited by 2D stick figures. They can only move left, right, forward, and backward. They have no concept of \"up\" or \"down.\"\n\nIf a 3D human walks up to Flatland and pushes a solid 3D sphere through their paper universe, what do the Flatlanders see?\n\nThey cannot see the sphere. They only see what intersects with their 2D world. As the sphere passes through the paper, they would see a tiny dot appear out of nowhere, mysteriously grow into a solid circle, shrink back down to a dot, and vanish into thin air.\n\nIf we apply this to a 4D spatial object (like a Tesseract or hypercube) passing through our 3D room, we wouldn't see the whole object. We would see a bizarre, shape-shifting 3D geometric form materialize from nothing, morph in size and shape, and then pop out of existence. We can map this mathematically with perfect precision, even if we can't mentally picture it.\n\n### 3. Could Entities Exist in Them?\nIf higher dimensions exist, higher-dimensional entities are a distinct theoretical possibility. Following the Flatland logic, their capabilities would seem completely god-like to us.\n* **Omniscience and Omnipresence:** A 3D human looking down at a 2D Flatlander can see inside their locked houses, their closed safes, and even inside their 2D bodies all at once. A 4D entity looking \"down\" into our 3D world would see the inside of your locked bank vaults, the core of the Earth, and the inside of your stomach simultaneously, from a direction we cannot point to.\n* **Bypassing Our Physics:** If you trap a 2D Flatlander inside a circle drawn in pen, they are hopelessly imprisoned. But a 3D human can simply reach in from \"above,\" pick the Flatlander up, and place them outside the circle. To the other Flatlanders, their friend just instantly teleported through solid walls. A 4D entity could pull you out of a locked, windowless room without ever opening the door.\n* **Stepping Out of Time:** If time itself is just another dimension we are moving through, a higher-dimensional entity might view our entire timeline as a solid landscape. To them, your birth, your present moment, and your death aren't sequential events; they are just different coordinates on a map that they can look at all at once.\n\n### The Ultimate Irony\nIf there are entities living in higher dimensions, they might find our existence incredibly claustrophobic, trapped on a thin slice of spacetime. But just as we cannot interact with them directly, they might face a physical barrier interacting with us. The energy required for a higher-dimensional object to stabilize itself inside a lower-dimensional \"brane\" might be so immense that any contact would be fleeting, volatile, or entirely disruptive to our local physics.\n\nIf you could peer into a higher dimension for just a second, which would you want to experience first: a new direction in space that you've never traveled, or the ability to look at time as a physical map?"
+        text: "The short answer is yes, absolutely. Both theoretical physics and philosophy suggest that dimensions beyond our familiar four (three of space, one of time) could easily exist. In fact, some of our most advanced mathematical models require them to function.\n\nHowever, when it comes to fathoming them or imagining entities living inside them, we run straight into the hard biological limits of the human brain. To understand how this works, we have to look at how physics constructs these dimensions, and how we can use lower dimensions to map out the higher ones.\n\n### 1. Do Extra Dimensions Exist? (What Physics Says)\nEinstein’s General Relativity showed us that spacetime is a flexible, four-dimensional fabric. But Einstein stopped at four. Later physicists realized that if you add more spatial dimensions, the laws of nature become much easier to unify.\n\n**String Theory and Hidden Dimensions**\nIn String Theory, the leading candidate for a \"Theory of Everything\" that tries to merge relativity with quantum mechanics, the universe doesn't have 4 dimensions. It has 11 dimensions (10 of space, 1 of time).\n\nWhy can't we see them? physicists suggest two main possibilities:\n* **They are compacted (The Garden Hose Analogy):** Imagine looking at a garden hose from a mile away. It looks like a one-dimensional line. But if you walk up close, you realize it has a second dimension: circumference. An ant can walk around the hose. String theory suggests the extra 7 spatial dimensions are curled up so incredibly small (at the Planck scale) that we simply cannot perceive them.\n* **We are trapped on a \"Brane\" (The Paper Analogy):** Another theory, called Brane Cosmology, suggests that our entire 4D universe is just a flat sheet of paper (a \"membrane\" or brane) floating inside a much larger, higher-dimensional bulk space. Just as a drawing on a page can't lift itself off the paper, we are trapped on our 4D slice of reality.\n\n### 2. Can We Understand or Fathom Them?\nBiologically, your brain evolved to survive in a 3D environment. You cannot truly visualize a 4D spatial object. If you try to imagine a direction that is perpendicular to length, width, and height simultaneously, your brain short-circuits.\n\n**The Flatland Concept**\nTo fathom how a higher dimension interacts with us, we use a famous thought experiment from the 1884 novella Flatland. Imagine a universe that is a flat, 2D sheet of paper, inhabited by 2D stick figures. They can only move left, right, forward, and backward. They have no concept of \"up\" or \"down.\"\n\nIf a 3D human walks up to Flatland and pushes a solid 3D sphere through their paper universe, what do the Flatlanders see?\n\nThey cannot see the sphere. They only see what intersects with their 2D world. As the sphere passes through the paper, they would see a tiny dot appear out of nowhere, mysteriously grow into a solid circle, shrink back down to a dot, and vanish into air.\n\nIf we apply this to a 4D spatial object (like a Tesseract or hypercube) passing through our 3D room, we wouldn't see the whole object. We would see a bizarre, shape-shifting 3D geometric form materialize from nothing, morph in size and shape, and then pop out of existence. We can map this mathematically with perfect precision, even if we can't mentally picture it.\n\n### 3. Could Entities Exist in Them?\nIf higher dimensions exist, higher-dimensional entities are a distinct theoretical possibility. Following the Flatland logic, their capabilities would seem completely god-like to us.\n* **Omniscience and Omnipresence:** A 3D human looking down at a 2D Flatlander can see inside their locked houses, their closed safes, and even inside their 2D bodies all at once. A 4D entity looking \"down\" into our 3D world would see the inside of your locked bank vaults, the core of the Earth, and the inside of your stomach simultaneously, from a direction we cannot point to.\n* **Bypassing Our Physics:** If you trap a 2D Flatlander inside a circle drawn in pen, they are hopelessly imprisoned. But a 3D human can simply reach in from \"above,\" pick the Flatlander up, and place them outside the circle. To the other Flatlanders, their friend just instantly teleported through solid walls. A 4D entity could pull you out of a locked, windowless room without ever opening the door.\n* **Stepping Out of Time:** If time itself is just another dimension we are moving through, a higher-dimensional entity might view our entire timeline as a solid landscape. To them, your birth, your present moment, and your death aren't sequential events; they are just different coordinates on a map that they can look at all at once.\n\n### The Ultimate Irony\nIf there are entities living in higher dimensions, they might find our existence incredibly claustrophobic, trapped on a thin slice of spacetime. But just as we cannot interact with them directly, they might face a physical barrier interacting with us. The energy required for a higher-dimensional object to stabilize itself inside a lower-dimensional \"brane\" might be so immense that any contact would be fleeting, volatile, or entirely disruptive to our local physics.\n\nIf you could peer into a higher dimension for just a second, which would you want to experience first: a new direction in space that you've never traveled, or the ability to look at time as a physical map?"
       },
       {
         id: 10,
@@ -373,17 +395,29 @@
       }
     ];
 
+
     // State Variables
     let currentIndex = 0;
     let isPlaying = false;
     let darkMode = true;
     let playbackSpeed = 1.0;
     
+    
+    // Auto Scroll Physics & Interactive Takeover States
+    let userInterrupted = false;
+    let interruptionTimeout = null;
+    let scrollAnimationFrameId = null;
+    let scrollVelocity = 0;
+    let lastProgrammaticScrollValue = -1;
+    let modalInactivityTimeout = null;
+    let modalActive = false;
+
     // Load persisted Base URL or default to './audio/'
     let audioBaseUrl = localStorage.getItem('nexus_audio_base_url') || './audio/';
     
     // Audio Object
     const audio = new Audio();
+    
 
     // DOM Caches
     const chatList = document.getElementById('chat-list');
@@ -412,6 +446,14 @@
     const errorMessage = document.getElementById('error-message');
     const btnCloseError = document.getElementById('btn-close-error');
 
+    // Modal DOM Caches
+    const physicsModal = document.getElementById('physics-modal');
+    const physicsModalContent = document.getElementById('physics-modal-content');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalCanvas = document.getElementById('modal-canvas');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+
     // Initialize Layout & Content
     function init() {
       // Configure Marked CDN options
@@ -432,6 +474,9 @@
       // Audio Event Listeners
       audio.addEventListener('ended', handleAudioEnded);
       audio.addEventListener('error', handleAudioError);
+      audio.addEventListener('play', startScrollLoop);
+      audio.addEventListener('playing', startScrollLoop);
+      audio.addEventListener('pause', stopScrollLoop);
 
       // DOM Subscriptions
       btnPlayPause.addEventListener('click', togglePlay);
@@ -462,9 +507,208 @@
       btnCloseError.addEventListener('click', () => {
         errorBanner.classList.add('hidden');
       });
+
+      // --- Precise Event Detection for User Interruption ---
+      // We decouple programmatic scrolls from scroll event listeners to prevent loop glitches.
+      chatContainer.addEventListener('wheel', triggerInterruption, { passive: true });
+      chatContainer.addEventListener('touchstart', triggerInterruption, { passive: true });
+      chatContainer.addEventListener('touchmove', triggerInterruption, { passive: true });
+      chatContainer.addEventListener('mousedown', triggerInterruption, { passive: true });
+      
+      window.addEventListener('keydown', (e) => {
+        const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+        if (scrollKeys.includes(e.key)) {
+          triggerInterruption();
+        }
+      });
+
+      window.addEventListener('pointermove', () => {
+        if (userInterrupted) {
+          resetInterruptionTimer();
+        }
+      });
+
+      // Interactive Mathematical Equation Clicks - launches modal
+      document.addEventListener('click', (e) => {
+        const card = e.target.closest('.equation-card');
+        if (card) {
+          const type = card.dataset.equation;
+          const title = card.dataset.title;
+          const desc = card.dataset.desc;
+          openPhysicsModal(type, title, desc);
+        }
+      });
+
+      // Modal Interactive Cooldown bindings
+      physicsModalContent.addEventListener('pointerdown', (e) => {
+        e.stopPropagation(); // Prevents background interruption signals
+        resetModalInactivityTimer();
+      });
+      physicsModalContent.addEventListener('pointermove', (e) => {
+        e.stopPropagation();
+        resetModalInactivityTimer();
+      });
+      physicsModalContent.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+        resetModalInactivityTimer();
+      });
+      physicsModalContent.addEventListener('wheel', (e) => {
+        e.stopPropagation();
+        resetModalInactivityTimer();
+      });
+
+      btnCloseModal.addEventListener('click', closePhysicsModal);
+      physicsModal.addEventListener('click', (e) => {
+        if (e.target === physicsModal) {
+          closePhysicsModal();
+        }
+      });
       
       // Setup initial audio source path
       syncAudioSource(false);
+    }
+
+    // Flags manual user interaction and schedules the cooldown back to auto-scrolling
+    function triggerInterruption() {
+      userInterrupted = true;
+      resetInterruptionTimer();
+    }
+
+    function resetInterruptionTimer() {
+      if (interruptionTimeout) {
+        clearTimeout(interruptionTimeout);
+      }
+      interruptionTimeout = setTimeout(() => {
+        userInterrupted = false;
+      }, 5000);
+    }
+
+    // --- Dynamic Physics Modal Execution ---
+    function openPhysicsModal(type, title, desc) {
+      modalActive = true;
+      modalTitle.innerText = title;
+      modalDesc.innerHTML = desc;
+
+      physicsModal.classList.remove('opacity-0', 'pointer-events-none');
+      physicsModalContent.classList.remove('scale-95');
+      physicsModalContent.classList.add('scale-100');
+
+      startSimCanvas(modalCanvas, type);
+      resetModalInactivityTimer();
+    }
+
+    function closePhysicsModal() {
+      modalActive = false;
+      if (modalInactivityTimeout) {
+        clearTimeout(modalInactivityTimeout);
+        modalInactivityTimeout = null;
+      }
+
+      physicsModal.classList.add('opacity-0', 'pointer-events-none');
+      physicsModalContent.classList.remove('scale-100');
+      physicsModalContent.classList.add('scale-95');
+
+      if (modalCanvas && modalCanvas.simId) {
+        cancelAnimationFrame(modalCanvas.simId);
+        modalCanvas.simId = null;
+      }
+    }
+
+    function resetModalInactivityTimer() {
+      if (!modalActive) return;
+      if (modalInactivityTimeout) {
+        clearTimeout(modalInactivityTimeout);
+      }
+
+      const countdownIndicator = document.getElementById('modal-cooldown');
+      if (countdownIndicator) {
+        countdownIndicator.innerText = "Closing in 5s of inactivity...";
+      }
+
+      modalInactivityTimeout = setTimeout(() => {
+        closePhysicsModal();
+      }, 5000);
+    }
+
+    // Controls for continuous auto-scrolling
+    function startScrollLoop() {
+      if (!scrollAnimationFrameId) {
+        lastFrameTime = performance.now();
+        scrollAnimationFrameId = requestAnimationFrame(scrollLoop);
+      }
+    }
+
+    function stopScrollLoop() {
+      if (scrollAnimationFrameId) {
+        cancelAnimationFrame(scrollAnimationFrameId);
+        scrollAnimationFrameId = null;
+      }
+      scrollVelocity = 0;
+    }
+
+    function scrollLoop() {
+      if (!isPlaying || audio.paused) {
+        stopScrollLoop();
+        return;
+      }
+
+      // Track display-refresh-rate delta
+      const now = performance.now();
+      const dt = Math.min((now - lastFrameTime) / 16.666, 3); 
+      lastFrameTime = now;
+
+      if (!userInterrupted) {
+        updateContinuousScroll(dt);
+      }
+
+      scrollAnimationFrameId = requestAnimationFrame(scrollLoop);
+    }
+
+    function updateContinuousScroll(dt) {
+      const activeElement = document.getElementById(`bubble-wrapper-${conversation[currentIndex].id}`);
+      if (!activeElement) return;
+
+      const containerRect = chatContainer.getBoundingClientRect();
+      const elemRect = activeElement.getBoundingClientRect();
+      
+      // Compute accurate coordinates inside scroll view
+      const bubbleTop = elemRect.top - containerRect.top + chatContainer.scrollTop;
+      const bubbleHeight = activeElement.offsetHeight;
+      const containerHeight = chatContainer.clientHeight;
+
+      const duration = audio.duration;
+      const currentTime = audio.currentTime;
+      const progress = (duration && !isNaN(duration)) ? (currentTime / duration) : 0;
+
+      // Keeps the exact read progress point aligned with the center of the viewport
+      const targetCenterPosition = bubbleTop + (progress * bubbleHeight);
+      const targetScrollTop = targetCenterPosition - (containerHeight / 2);
+
+      const currentScroll = chatContainer.scrollTop;
+      const maxScroll = chatContainer.scrollHeight - containerHeight;
+
+      // Weighted dynamic deceleration step
+      const diff = targetScrollTop - currentScroll;
+      let step = diff * 0.05 * dt;
+
+      // Limit fast catch-up step to prevent jarring snap-movements
+      const maxStep = 20 * dt; 
+      if (Math.abs(step) > maxStep) {
+        step = Math.sign(step) * maxStep;
+      }
+
+      let nextScroll = currentScroll + step;
+
+      // Boundary safety check
+      if (nextScroll < 0) {
+        nextScroll = 0;
+      } else if (nextScroll > maxScroll) {
+        nextScroll = maxScroll;
+      }
+
+      // Record programmatic target value
+      lastProgrammaticScrollValue = Math.round(nextScroll);
+      chatContainer.scrollTop = nextScroll;
     }
 
     // Render Chat List dynamically
@@ -472,8 +716,6 @@
       chatList.innerHTML = '';
       conversation.forEach((msg, idx) => {
         const isJay = msg.speaker === 'Jay';
-        
-        // Match condition for our multiverse container
         const isIncludeParticles = msg.id === 16;
         
         // Render bubble structure
@@ -481,9 +723,9 @@
         bubbleWrap.id = `bubble-wrapper-${msg.id}`;
         bubbleWrap.className = `flex flex-col ${isJay ? 'items-end' : 'items-start'} my-6 transition-all duration-300`;
         
-        // Segment Header
+        // Segment Header containing localized Play Button
         const header = document.createElement('div');
-        header.className = `flex items-center space-x-2 mb-2 ${isJay ? 'mr-4' : 'ml-4'}`;
+        header.className = `flex items-center space-x-2.5 mb-2 ${isJay ? 'flex-row-reverse space-x-reverse mr-4' : 'ml-4'}`;
         
         // Active speaking voice wave helper
         const waves = document.createElement('div');
@@ -500,13 +742,29 @@
         label.className = `text-[10px] font-bold uppercase tracking-widest text-slate-400`;
         label.innerText = msg.speaker;
 
+        // Localized Segment Play Button
+        const playBtn = document.createElement('button');
+        playBtn.className = `p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 transition-colors focus:outline-none`;
+        playBtn.title = `Play from here`;
+        playBtn.id = `play-btn-${msg.id}`;
+        playBtn.innerHTML = `
+          <svg class="w-3 h-3 fill-current ml-0.5" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        `;
+        playBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          jumpToTrack(idx);
+        });
+
         header.appendChild(waves);
         header.appendChild(label);
+        header.appendChild(playBtn);
         
         // Message Card
         const card = document.createElement('div');
         card.id = `card-${msg.id}`;
-        card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-pointer shadow-sm border border-slate-250 dark:border-slate-800 ${
+        card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm border border-slate-250 dark:border-slate-800 ${
           isJay 
             ? 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-tr-none opacity-60 hover:opacity-100' 
             : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-tl-none opacity-60 hover:opacity-100'
@@ -518,11 +776,6 @@
         prose.innerHTML = marked.parse(msg.text);
         
         card.appendChild(prose);
-        
-        // Jump progress track on select click
-        card.addEventListener('click', () => {
-          jumpToTrack(idx);
-        });
 
         bubbleWrap.appendChild(header);
         bubbleWrap.appendChild(card);
@@ -564,11 +817,10 @@
                   <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/>
                 </svg>
             </button>
-            <div id="instructions" class="absolute bottom-4 right-4 text-slate-400 text-[9px] text-right pointer-events-none z-10 leading-relaxed bg-slate-950/60 px-2.5 py-1.5 rounded-md border border-slate-800">
-                Left Click to Rotate<br>
-                Right Click to Pan<bf>
-                Scroll to Zoom
-                
+            <div id="instructions" class="absolute bottom-4 right-4 text-slate-400 text-[9px] text-right pointer-events-none z-10 leading-relaxed bg-slate-950/60 px-2.5 py-1.5 rounded-md border border-slate-800 font-sans">
+                Left Click & Drag to Rotate<br>
+                Scroll to Zoom<br>
+                Right Click & Drag to Pan
             </div>
           `;
           card.appendChild(multiverseContainer);
@@ -625,9 +877,376 @@
       });
     }
 
+    // Starts dynamic simulation canvas mounting
+    function startSimCanvas(canvas, type) {
+      if (canvas.simId) {
+        cancelAnimationFrame(canvas.simId);
+        canvas.simId = null;
+      }
+
+      if (type === 'schwarzschild') {
+        runSchwarzschildSim(canvas);
+      } else if (type === 'planck') {
+        runPlanckSim(canvas);
+      } else if (type === 'landauer') {
+        runLandauerSim(canvas);
+      }
+    }
+
+    function resizeCanvas(canvas) {
+      canvas.width = canvas.clientWidth || canvas.offsetWidth || 500;
+      canvas.height = canvas.clientHeight || canvas.offsetHeight || 300;
+    }
+
+    // --- ACCRETION DISK GRAVITY SIMULATOR ---
+    function runSchwarzschildSim(canvas) {
+      const ctx = canvas.getContext('2d');
+      const particles = [];
+      const maxParticles = 140;
+
+      resizeCanvas(canvas);
+
+      function createParticle() {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * (canvas.width / 2) + (canvas.width / 12);
+        return {
+          x: canvas.width / 2 + Math.cos(angle) * distance,
+          y: canvas.height / 2 + Math.sin(angle) * distance,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 1.5 + 0.5,
+          color: `rgba(${99 + Math.random() * 50}, ${102 + Math.random() * 50}, 241, ${0.4 + Math.random() * 0.5})`
+        };
+      }
+
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(createParticle());
+      }
+
+      // Add drag/click support to perturb matter orbits
+      canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        for (let i = 0; i < 24; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * 35;
+          particles.push({
+            x: mx + Math.cos(angle) * dist,
+            y: my + Math.sin(angle) * dist,
+            vx: (Math.random() - 0.5) * 2.5,
+            vy: (Math.random() - 0.5) * 2.5,
+            size: Math.random() * 2 + 1,
+            color: 'rgba(56, 189, 248, 0.9)'
+          });
+        }
+      });
+
+      function tick() {
+        if (!canvas.isConnected || !canvas.simId) return;
+
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.22)'; // Soft trail blur
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const Rs = 26; // Event Horizon representations scale
+
+        // Draw Black Hole Singularity void
+        ctx.beginPath();
+        ctx.arc(cx, cy, Rs, 0, Math.PI * 2);
+        ctx.fillStyle = '#020617';
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(99, 102, 241, 0.5)';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, Rs + 14, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.04)';
+        ctx.fill();
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          const dx = cx - p.x;
+          const dy = cy - p.y;
+          const distSqr = dx * dx + dy * dy;
+          const dist = Math.sqrt(distSqr);
+
+          if (dist < Rs + 2) {
+            if (particles.length > maxParticles) {
+              particles.splice(i, 1);
+              i--;
+              continue;
+            }
+            particles[i] = createParticle();
+            continue;
+          }
+
+          const gravityPullForce = 130 / (distSqr + 90);
+          p.vx += (dx / dist) * gravityPullForce;
+          p.vy += (dy / dist) * gravityPullForce;
+
+          // Accretion disk rotation velocity
+          const rotForceFactor = 0.07;
+          p.vx += (-dy / dist) * rotForceFactor;
+          p.vy += (dx / dist) * rotForceFactor;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+
+        canvas.simId = requestAnimationFrame(tick);
+      }
+      canvas.simId = requestAnimationFrame(tick);
+    }
+
+    // --- SPACETIME FOAM QUANTUM SIMULATOR ---
+    function runPlanckSim(canvas) {
+      const ctx = canvas.getContext('2d');
+      const particles = [];
+      const maxParticles = 65;
+
+      resizeCanvas(canvas);
+
+      const gridSize = 16; 
+
+      function createPlanckFoam() {
+        const cols = Math.floor(canvas.width / gridSize);
+        const rows = Math.floor(canvas.height / gridSize);
+        return {
+          col: Math.floor(Math.random() * cols),
+          row: Math.floor(Math.random() * rows),
+          life: 1.0,
+          decay: 0.02 + Math.random() * 0.04,
+          size: Math.random() * 2 + 1,
+          color: `rgba(${56 + Math.random() * 80}, ${189 + Math.random() * 50}, 248,`
+        };
+      }
+
+      for (let i = 0; i < maxParticles; i++) {
+        particles.push(createPlanckFoam());
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const targetCol = Math.floor(mx / gridSize);
+        const targetRow = Math.floor(my / gridSize);
+
+        for (let c = targetCol - 2; c <= targetCol + 2; c++) {
+          for (let r = targetRow - 2; r <= targetRow + 2; r++) {
+            if (Math.random() > 0.4) {
+              particles.push({
+                col: c,
+                row: r,
+                life: 1.0,
+                decay: 0.07,
+                size: 2.5,
+                color: 'rgba(244, 63, 94,' // Rose quantum flaring
+              });
+            }
+          }
+        }
+      });
+
+      function tick() {
+        if (!canvas.isConnected || !canvas.simId) return;
+
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw quantum spacetime coordinates grid representation
+        ctx.strokeStyle = 'rgba(30, 41, 59, 0.4)';
+        ctx.lineWidth = 0.5;
+
+        for (let x = 0; x < canvas.width; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
+        }
+
+        // Draw active foam fluctuations snaps
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.life -= p.decay;
+
+          if (p.life <= 0) {
+            if (particles.length > maxParticles) {
+              particles.splice(i, 1);
+              i--;
+              continue;
+            }
+            particles[i] = createPlanckFoam();
+            continue;
+          }
+
+          const px = p.col * gridSize + gridSize / 2;
+          const py = p.row * gridSize + gridSize / 2;
+
+          ctx.beginPath();
+          ctx.arc(px, py, p.size * p.life, 0, Math.PI * 2);
+          ctx.fillStyle = `${p.color} ${p.life})`;
+          ctx.fill();
+        }
+
+        canvas.simId = requestAnimationFrame(tick);
+      }
+      canvas.simId = requestAnimationFrame(tick);
+    }
+
+    // --- ENTROPY ERASURE THERMODYNAMIC SIMULATOR ---
+    function runLandauerSim(canvas) {
+      const ctx = canvas.getContext('2d');
+      const particles = [];
+      const heatFlares = [];
+
+      resizeCanvas(canvas);
+
+      const leftX = canvas.width * 0.25;
+      const rightX = canvas.width * 0.75;
+      const centerY = canvas.height * 0.5;
+
+      function populate() {
+        particles.length = 0;
+        for (let i = 0; i < 40; i++) {
+          const side = Math.random() > 0.5 ? 'left' : 'right';
+          particles.push({
+            x: (side === 'left' ? leftX : rightX) + (Math.random() - 0.5) * 35,
+            y: centerY + (Math.random() - 0.5) * 35,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            targetSide: side,
+            color: side === 'left' ? 'rgba(56, 189, 248, 0.7)' : 'rgba(168, 85, 247, 0.7)'
+          });
+        }
+      }
+      populate();
+
+      let isEraseActive = false;
+      let eraseTimer = 0;
+
+      canvas.addEventListener('mousedown', () => {
+        if (isEraseActive) return;
+        isEraseActive = true;
+        eraseTimer = 100;
+      });
+
+      function tick() {
+        if (!canvas.isConnected || !canvas.simId) return;
+
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Render potentials well
+        ctx.strokeStyle = 'rgba(51, 65, 85, 0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, centerY + 65);
+        ctx.quadraticCurveTo(canvas.width / 4, centerY - 25, canvas.width / 2, centerY + 35);
+        ctx.quadraticCurveTo(3 * canvas.width / 4, centerY - 25, canvas.width, centerY + 65);
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.3)';
+        ctx.font = 'bold 24px font-mono, monospace';
+        ctx.fillText('0', leftX - 8, centerY - 60);
+        ctx.fillText('1', rightX - 8, centerY - 60);
+
+        if (isEraseActive) {
+          eraseTimer--;
+          ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+          ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+
+          ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          const sweepLineX = rightX + 60 - ((100 - eraseTimer) / 100) * (rightX - leftX + 45);
+          ctx.moveTo(sweepLineX, 0);
+          ctx.lineTo(sweepLineX, canvas.height);
+          ctx.stroke();
+
+          for (let p of particles) {
+            if (p.x > sweepLineX) {
+              p.vx -= 1.9;
+              p.targetSide = 'left';
+              p.color = 'rgba(56, 189, 248, 0.7)';
+
+              if (Math.random() > 0.65) {
+                heatFlares.push({
+                  x: p.x,
+                  y: p.y,
+                  vx: (Math.random() - 0.5) * 1 + 1.2,
+                  vy: (Math.random() - 1.5) * 2,
+                  life: 1.0,
+                  decay: 0.045
+                });
+              }
+            }
+          }
+
+          if (eraseTimer <= 0) {
+            isEraseActive = false;
+            setTimeout(populate, 2000);
+          }
+        }
+
+        for (let p of particles) {
+          const homeX = p.targetSide === 'left' ? leftX : rightX;
+          p.vx += (homeX - p.x) * 0.0035;
+          p.vy += (centerY - p.y) * 0.0035;
+
+          p.vx *= 0.95;
+          p.vy *= 0.95;
+
+          p.vx += (Math.random() - 0.5) * 0.25;
+          p.vy += (Math.random() - 0.5) * 0.25;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+
+        for (let i = 0; i < heatFlares.length; i++) {
+          const h = heatFlares[i];
+          h.life -= h.decay;
+          if (h.life <= 0) {
+            heatFlares.splice(i, 1);
+            i--;
+            continue;
+          }
+          h.x += h.vx;
+          h.y += h.vy;
+
+          ctx.beginPath();
+          ctx.arc(h.x, h.y, 2.5 * h.life, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(239, 68, 68, ${h.life * 0.85})`;
+          ctx.fill();
+        }
+
+        canvas.simId = requestAnimationFrame(tick);
+      }
+      canvas.simId = requestAnimationFrame(tick);
+    }
+
     // Synchronize Audio source when index or base path alters
     function syncAudioSource(shouldTriggerPlayback = true) {
-      // Clear warnings
       errorBanner.classList.add('hidden');
 
       let baseUrl = audioBaseUrl;
@@ -647,7 +1266,9 @@
       audio.playbackRate = playbackSpeed;
 
       if (isPlaying && shouldTriggerPlayback) {
-        audio.play().catch(err => {
+        audio.play().then(() => {
+          startScrollLoop();
+        }).catch(err => {
           console.warn("User action required or audio stream not fully loaded yet:", err);
         });
       } else if (!isPlaying) {
@@ -660,12 +1281,15 @@
     function togglePlay() {
       isPlaying = !isPlaying;
       if (isPlaying) {
-        audio.play().catch(err => {
+        audio.play().then(() => {
+          startScrollLoop();
+        }).catch(err => {
           console.warn("Could not play audio track on toggle Play:", err);
           handleAudioError();
         });
       } else {
         audio.pause();
+        stopScrollLoop();
       }
       updateUI();
     }
@@ -704,6 +1328,7 @@
         scrollToCurrent();
       } else {
         isPlaying = false;
+        stopScrollLoop();
         updateUI();
       }
     }
@@ -717,6 +1342,7 @@
         errorBanner.classList.remove('hidden');
         
         isPlaying = false;
+        stopScrollLoop();
         updateUI();
       }
     }
@@ -743,14 +1369,14 @@
       updateUI();
     }
 
-    // Scroll active item smoothly into middle alignment
+    // Resets manual interruption state to trigger fluid linear interpolation glide
     function scrollToCurrent() {
-      setTimeout(() => {
-        const activeElement = document.getElementById(`bubble-wrapper-${conversation[currentIndex].id}`);
-        if (activeElement) {
-          activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 150);
+      userInterrupted = false;
+      if (interruptionTimeout) {
+        clearTimeout(interruptionTimeout);
+        interruptionTimeout = null;
+      }
+      startScrollLoop();
     }
 
     // Download segment file
@@ -798,16 +1424,36 @@
       segmentCounter.innerText = `Segment ${currentIndex + 1} / ${conversation.length}`;
 
       // 4. Update chat container items highlighted state
-      conversation.forEach((msg) => {
+      conversation.forEach((msg, idx) => {
         const isCurrent = (msg.id === conversation[currentIndex].id);
         const card = document.getElementById(`card-${msg.id}`);
         const wrap = document.getElementById(`bubble-wrapper-${msg.id}`);
         const waves = document.getElementById(`waves-${msg.id}`);
         const labelText = document.getElementById(`label-text-${msg.id}`);
+        const playBtn = document.getElementById(`play-btn-${msg.id}`);
         
         if (!card || !wrap) return;
 
         const isJay = msg.speaker === 'Jay';
+
+        // Update active segment play icon indicators
+        if (playBtn) {
+          if (isCurrent && isPlaying) {
+            playBtn.innerHTML = `
+              <svg class="w-3 h-3 fill-current text-indigo-600 dark:text-indigo-400" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              </svg>
+            `;
+            playBtn.classList.add('bg-indigo-50', 'dark:bg-indigo-950/40');
+          } else {
+            playBtn.innerHTML = `
+              <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            `;
+            playBtn.classList.remove('bg-indigo-50', 'dark:bg-indigo-950/40');
+          }
+        }
 
         if (isCurrent) {
           // Speak Wave
@@ -825,9 +1471,9 @@
           card.style.transform = 'scale(1.02)';
           
           if (isJay) {
-            card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-pointer shadow-xl rounded-tr-none scale-[1.02] bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-700 shadow-slate-200/50 dark:shadow-slate-950/50`;
+            card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-default shadow-xl rounded-tr-none scale-[1.02] bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-2 border-slate-300 dark:border-slate-700 shadow-slate-200/50 dark:shadow-slate-950/50`;
           } else {
-            card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-pointer shadow-xl rounded-tl-none scale-[1.02] bg-indigo-600 text-white border-2 border-indigo-400 dark:border-indigo-500 shadow-indigo-200/50 dark:shadow-indigo-900/20`;
+            card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-default shadow-xl rounded-tl-none scale-[1.02] bg-indigo-600 text-white border-2 border-indigo-400 dark:border-indigo-500 shadow-indigo-200/50 dark:shadow-indigo-900/20`;
           }
         } else {
           // Reset default inactive highlights
@@ -836,7 +1482,7 @@
           labelText.innerText = msg.speaker;
 
           card.style.transform = 'scale(1)';
-          card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-pointer border shadow-sm rounded-tr-none rounded-tl-none opacity-60 hover:opacity-100 ${
+          card.className = `relative px-5 py-4 rounded-2xl max-w-[90%] sm:max-w-[85%] transition-all duration-500 text-sm cursor-default border shadow-sm rounded-tr-none rounded-tl-none opacity-60 hover:opacity-100 ${
             isJay 
               ? 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 rounded-tr-none' 
               : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 rounded-tl-none'
@@ -1008,7 +1654,7 @@
                   if (data.radius < 1) data.radius = Math.random() * 400 + 50; 
               } else if (stateText === "Big Rip") {
                   data.radius += (expansion - gravity) * 2;
-                  if (data.radius > 800) data.radius = 1; 
+                  if (data.radius > 800) data.radius = 1; 
               } else {
                   data.theta += data.baseSpeed * (gravity > 0 ? gravity : 0.1);
               }
