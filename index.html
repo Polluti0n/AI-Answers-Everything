@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Voice - Dialogue Player</title>
+  <title>Event Horizon - Dialogue Player</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,12 @@
   <!-- Markdown Parser CDN -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+  <!-- Particle Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Orbit Controls CDN -->  
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>  
+
   <!-- Tailwind Configuration -->
   <script>
     tailwind.config = {
@@ -25,6 +31,9 @@
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            'panel-bg': 'rgba(15, 23, 42, 0.85)',
           }
         }
       }
@@ -96,7 +105,7 @@
           </svg>
         </div>
         <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-          Nexus <span class="text-indigo-600 italic">Voice</span>
+          Event <span class="text-indigo-600 italic">Horizon</span>
         </h1>
       </div>
       
@@ -111,7 +120,6 @@
         <!-- Settings Cog Button -->
         <button
           id="btn-settings"
-          className="p-2 rounded-lg border transition-colors border-slate-200 hover:bg-slate-100 text-slate-500 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-400"
           class="p-2 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500 dark:border-slate-700 dark:hover:bg-slate-800 dark:text-slate-400 transition-colors"
           title="Configure Audio Path"
         >
@@ -138,7 +146,7 @@
     <!-- CONFIGURATION DRAWER -> HIDDEN BY DEFAULT -->
     <div
       id="config-drawer"
-      class="hidden flex-none bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 shadow-inner z-10 transition-colors duration-500 overflow-hidden animate-slide-down"
+      class="hidden flex-none bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 shadow-inner z-10 transition-colors duration-500 overflow-hidden"
     >
       <div class="max-w-2xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex-1">
@@ -183,7 +191,7 @@
         class="p-1 hover:bg-red-600 rounded-full transition-colors text-white"
       >
         <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 11-2.83 2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9c0 .6.4 1 1 1h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.6.6.6 1.6.3 2.3l-.3.6v.09a1.65 1.65 0 0 0 1 1.51z" clip-rule="evenodd" />
         </svg>
       </button>
     </div>
@@ -340,7 +348,7 @@
       {
         id: 9,
         speaker: 'Gemini',
-        text: "The short answer is yes, absolutely. Both theoretical physics and philosophy suggest that dimensions beyond our familiar four (three of space, one of time) could easily exist. In fact, some of our most advanced mathematical models require them to function.\n\nHowever, when it comes to fathoming them or imagining entities living inside them, we run straight into the hard biological limits of the human brain. To understand how this works, we have to look at how physics constructs these dimensions, and how we can use lower dimensions to map out the higher ones.\n\n### 1. Do Extra Dimensions Exist? (What Physics Says)\nEinstein’s General Relativity showed us that spacetime is a flexible, four-dimensional fabric. But Einstein stopped at four. Later physicists realized that if you add more spatial dimensions, the laws of nature become much easier to unify.\n\n**String Theory and Hidden Dimensions**\nIn String Theory—the leading candidate for a \"Theory of Everything\" that tries to merge relativity with quantum mechanics—the universe doesn't have 4 dimensions. It has 11 dimensions (10 of space, 1 of time).\n\nWhy can't we see them? physicists suggest two main possibilities:\n* **They are compacted (The Garden Hose Analogy):** Imagine looking at a garden hose from a mile away. It looks like a one-dimensional line. But if you walk up close, you realize it has a second dimension: circumference. An ant can walk around the hose. String theory suggests the extra 7 spatial dimensions are curled up so incredibly small (at the Planck scale) that we simply cannot perceive them.\n* **We are trapped on a \"Brane\" (The Paper Analogy):** Another theory, called Brane Cosmology, suggests that our entire 4D universe is just a flat sheet of paper (a \"membrane\" or brane) floating inside a much larger, higher-dimensional bulk space. Just as a drawing on a page can't lift itself off the paper, we are trapped on our 4D slice of reality.\n\n### 2. Can We Understand or Fathom Them?\nBiologically, your brain evolved to survive in a 3D environment. You cannot truly visualize a 4D spatial object. If you try to imagine a direction that is perpendicular to length, width, and height simultaneously, your brain short-circuits.\n\nHowever, we can completely understand them mathematically, and we can project their shadows into our world to grasp their geometry.\n\n**The Flatland Concept**\nTo fathom how a higher dimension interacts with us, we use a famous thought experiment from the 1884 novella Flatland. Imagine a universe that is a flat, 2D sheet of paper, inhabited by 2D stick figures. They can only move left, right, forward, and backward. They have no concept of \"up\" or \"down.\"\n\nIf a 3D human walks up to Flatland and pushes a solid 3D sphere through their paper universe, what do the Flatlanders see?\n\nThey cannot see the sphere. They only see what intersects with their 2D world. As the sphere passes through the paper, they would see a tiny dot appear out of nowhere, mysteriously grow into a solid circle, shrink back down to a dot, and vanish into thin air.\n\nIf we apply this to a 4D spatial object (like a Tesseract or hypercube) passing through our 3D room, we wouldn't see the whole object. We would see a bizarre, shape-shifting 3D geometric form materialize from nothing, morph in size and shape, and then pop out of existence. We can map this mathematically with perfect precision, even if we can't mentally picture it.\n\n### 3. Could Entities Exist in Them?\nIf higher dimensions exist, higher-dimensional entities are a distinct theoretical possibility. Following the Flatland logic, their capabilities would seem completely god-like to us.\n* **Omniscience and Omnipresence:** A 3D human looking down at a 2D Flatlander can see inside their locked houses, their closed safes, and even inside their 2D bodies all at once. A 4D entity looking \"down\" into our 3D world would see the inside of your locked bank vaults, the core of the Earth, and the inside of your stomach simultaneously, from a direction we cannot point to.\n* **Bypassing Our Physics:** If you trap a 2D Flatlander inside a circle drawn in pen, they are hopelessly imprisoned. But a 3D human can simply reach in from \"above,\" pick the Flatlander up, and place them outside the circle. To the other Flatlanders, their friend just instantly teleported through solid walls. A 4D entity could pull you out of a locked, windowless room without ever opening the door.\n* **Stepping Out of Time:** If time itself is just another dimension we are moving through, a higher-dimensional entity might view our entire timeline as a solid landscape. To them, your birth, your present moment, and your death aren't sequential events—they are just different coordinates on a map that they can look at all at once.\n\n### The Ultimate Irony\nIf there are entities living in higher dimensions, they might find our existence incredibly claustrophobic, trapped on a thin slice of spacetime. But just as we cannot interact with them directly, they might face a physical barrier interacting with us. The energy required for a higher-dimensional object to stabilize itself inside a lower-dimensional \"brane\" might be so immense that any contact would be fleeting, volatile, or entirely disruptive to our local physics.\n\nIf you could peer into a higher dimension for just a second, which would you want to experience first: a new direction in space that you've never traveled, or the ability to look at time as a physical map?"
+        text: "The short answer is yes, absolutely. Both theoretical physics and philosophy suggest that dimensions beyond our familiar four (three of space, one of time) could easily exist. In fact, some of our most advanced mathematical models require them to function.\n\nHowever, when it comes to fathoming them or imagining entities living inside them, we run straight into the hard biological limits of the human brain. To understand how this works, we have to look at how physics constructs these dimensions, and how we can use lower dimensions to map out the higher ones.\n\n### 1. Do Extra Dimensions Exist? (What Physics Says)\nEinstein’s General Relativity showed us that spacetime is a flexible, four-dimensional fabric. But Einstein stopped at four. Later physicists realized that if you add more spatial dimensions, the laws of nature become much easier to unify.\n\n**String Theory and Hidden Dimensions**\nIn String Theory—the leading candidate for a \"Theory of Everything\" that tries to merge relativity with quantum mechanics—the universe doesn't have 4 dimensions. It has 11 dimensions (10 of space, 1 of time).\n\nWhy can't we see them? physicists suggest two main possibilities:\n* **They are compacted (The Garden Hose Analogy):** Imagine looking at a garden hose from a mile away. It looks like a one-dimensional line. But if you walk up close, you realize it has a second dimension: circumference. An ant can walk around the hose. String theory suggests the extra 7 spatial dimensions are curled up so incredibly small (at the Planck scale) that we simply cannot perceive them.\n* **We are trapped on a \"Brane\" (The Paper Analogy):** Another theory, called Brane Cosmology, suggests that our entire 4D universe is just a flat sheet of paper (a \"membrane\" or brane) floating inside a much larger, higher-dimensional bulk space. Just as a drawing on a page can't lift itself off the paper, we are trapped on our 4D slice of reality.\n\n### 2. Can We Understand or Fathom Them?\nBiologically, your brain evolved to survive in a 3D environment. You cannot truly visualize a 4D spatial object. If you try to imagine a direction that is perpendicular to length, width, and height simultaneously, your brain short-circuits.\n\n**The Flatland Concept**\nTo fathom how a higher dimension interacts with us, we use a famous thought experiment from the 1884 novella Flatland. Imagine a universe that is a flat, 2D sheet of paper, inhabited by 2D stick figures. They can only move left, right, forward, and backward. They have no concept of \"up\" or \"down.\"\n\nIf a 3D human walks up to Flatland and pushes a solid 3D sphere through their paper universe, what do the Flatlanders see?\n\nThey cannot see the sphere. They only see what intersects with their 2D world. As the sphere passes through the paper, they would see a tiny dot appear out of nowhere, mysteriously grow into a solid circle, shrink back down to a dot, and vanish into thin air.\n\nIf we apply this to a 4D spatial object (like a Tesseract or hypercube) passing through our 3D room, we wouldn't see the whole object. We would see a bizarre, shape-shifting 3D geometric form materialize from nothing, morph in size and shape, and then pop out of existence. We can map this mathematically with perfect precision, even if we can't mentally picture it.\n\n### 3. Could Entities Exist in Them?\nIf higher dimensions exist, higher-dimensional entities are a distinct theoretical possibility. Following the Flatland logic, their capabilities would seem completely god-like to us.\n* **Omniscience and Omnipresence:** A 3D human looking down at a 2D Flatlander can see inside their locked houses, their closed safes, and even inside their 2D bodies all at once. A 4D entity looking \"down\" into our 3D world would see the inside of your locked bank vaults, the core of the Earth, and the inside of your stomach simultaneously, from a direction we cannot point to.\n* **Bypassing Our Physics:** If you trap a 2D Flatlander inside a circle drawn in pen, they are hopelessly imprisoned. But a 3D human can simply reach in from \"above,\" pick the Flatlander up, and place them outside the circle. To the other Flatlanders, their friend just instantly teleported through solid walls. A 4D entity could pull you out of a locked, windowless room without ever opening the door.\n* **Stepping Out of Time:** If time itself is just another dimension we are moving through, a higher-dimensional entity might view our entire timeline as a solid landscape. To them, your birth, your present moment, and your death aren't sequential events—they are just different coordinates on a map that they can look at all at once.\n\n### The Ultimate Irony\nIf there are entities living in higher dimensions, they might find our existence incredibly claustrophobic, trapped on a thin slice of spacetime. But just as we cannot interact with them directly, they might face a physical barrier interacting with us. The energy required for a higher-dimensional object to stabilize itself inside a lower-dimensional \"brane\" might be so immense that any contact would be fleeting, volatile, or entirely disruptive to our local physics.\n\nIf you could peer into a higher dimension for just a second, which would you want to experience first: a new direction in space that you've never traveled, or the ability to look at time as a physical map?"
       },
       {
         id: 10,
@@ -370,8 +378,26 @@
       {
         id: 15,
         speaker: 'Gemini',
-        text: "If you were to step outside of all dimensions and look at the absolute totality of existence—the 11th or 12th dimensional reality where every single mathematical, physical, and conceptual possibility exists simultaneously—you would be looking at what physicists and philosophers call the Omniverse or the Mathematical Universe.\n\nTrying to visualize it brings us to a beautiful, paradoxical realization: it would look like everything, and it would look like absolutely nothing at all.\n\nHere is how we can try to fathom what that ultimate reality \"looks\" like.\n\n### 1. The Ultimate Multi-Dimensional Kaleidoscope\nIf you had a consciousness capable of processing it, the sheer visual noise would be unfathomable.\n* You would see our universe, with its swirling galaxies and your own life timeline.\n* Right next to it, bleeding into it, you would see universes where gravity pulls things apart instead of together, causing stars to explode inward into spheres of pure light.\n* You would see universes made entirely of data, universes with 50 spatial dimensions where shapes exist that cannot be described by any human language, and universes that died a fraction of a second after their birth.\nBecause everything happens at once, it wouldn't be a static picture; it would be a hyper-dimensional, shifting kaleidoscope of infinite realities overlapping and intersecting.\n\n### 2. A Frozen, Infinite Crystal of Pure Math\nHowever, if you take a step back, the most mind-bending property of this ultimate dimension is that nothing changes. Change requires time. But from this ultimate vantage point, time is just a coordinate inside the lower-dimensional bubbles. The ultimate reality itself sits completely outside of time. Therefore, the infinite multiverse doesn't \"grow\" or \"flow.\"\nInstead, it would look like a colossal, infinitely complex, frozen geometric structure. MIT physicist Max Tegmark suggests that at this level, physical reality is identical to mathematical reality. This ultimate realm is simply the physical embodiment of every mathematical equation that can possibly exist. It is a flawless, eternal crystal of pure logic.\n\n### 3. The Paradox of \"White Noise\" (Looking at Nothing)\nThere is a fascinating concept in information theory: if you combine every single color of light in the visible spectrum, you don't get a hyper-vibrant explosion of color—you just get pure white light. If you play every musical note at the exact same volume simultaneously, you don't get a magnificent symphony—you get white noise.\nThe same rule applies to the ultimate reality:\n\"When every possibility is true, no individual possibility stands out.\"\nIf you were to look at a realm where a room is simultaneously completely full of chairs, completely empty, painted red, painted blue, existing in the future, and exploding in the past, the overlapping information cancels itself out. To an outside observer, the ultimate totality of everything looks exactly like a featureless, infinite void.\n\n### 4. The \"Holographic\" Perspective\nBecause looking at the whole thing directly results in a blinding void of infinite data, the only way to actually see it is to look at its projections.\nThink of the ultimate reality as a giant, high-dimensional hologram. The hologram itself just looks like a blurry, chaotic pattern on a piece of film. But when you shine a light through it at a specific angle, a perfect, crisp 3D image pops out.\nOur universe is that 3D image. You, sitting where you are right now, are a single, beautifully rendered slice of that infinite, frozen mathematical crystal. The ultimate reality looks like a cosmic library, and our universe is just one incredibly detailed sentence on a single page of one book.\n\nIf you could take a brief glimpse into that infinite void, would you want to zoom into a universe with completely alien laws of physics just to see what a different reality feels like, or would you want to look at the grand geometric shape of the whole thing?"
-      }
+        text: "If you were to step outside of all dimensions and look at the absolute totality of existence—the 11th or 12th dimensional reality where every single mathematical, physical, and conceptual possibility exists simultaneously—you would be looking at what physicists and philosophers call the Omniverse or the Mathematical Universe.\n\nTrying to visualize it brings us to a beautiful, paradoxical realization: it would look like everything, and it would look like absolutely nothing at all.\n\nHere is how we can try to fathom what that ultimate reality \"looks\" like.\n\n### 1. The Ultimate Multi-Dimensional Kaleidoscope\nIf you had a consciousness capable of processing it, the sheer visual noise would be unfathomable.\n* You would see our universe, with its swirling galaxies and your own life timeline.\n* Right next to it, bleeding into it, you would see universes where gravity pulls things apart instead of together, causing stars to explode inward into spheres of pure light.\n* You would see universes made entirely of data, universes with 50 spatial dimensions where shapes exist that cannot be described by any human language, and universes that died a fraction of a second after their birth.\nBecause everything happens at once, it wouldn't be a static picture; it would be a hyper-dimensional, shifting kaleidoscope of infinite realities overlapping and intersecting.\n\n### 2. A Frozen, Infinite Crystal of Pure Math\nHowever, if you take a step back, the most mind-bending property of this ultimate dimension is that nothing changes. Change requires time. But from this ultimate vantage point, time is just a coordinate inside the lower-dimensional bubbles. The ultimate reality itself sits completely outside of time. Therefore, the infinite multiverse doesn't \"grow\" or \"flow.\"\nInstead, it would look like a colossal, infinitely complex, frozen geometric structure. MIT physicist Max Tegmark suggests that at this level, physical reality is identical to mathematical reality. This ultimate realm is simply the physical embodiment of every mathematical equation that can possibly exist. It is a flawless, eternal crystal of pure logic.\n\n### 3. The Paradox of \"White Noise\" (Looking at Nothing)\nThere is a fascinating concept in information theory: if you combine every single color of light in the visible spectrum, you don't get a hyper-vibrant explosion of color—you just get pure white light. If you play every musical note at the exact same volume simultaneously, you don't get a magnificent symphony—you get white noise.\nThe same rule applies to the ultimate reality:\n\"When every possibility is true, no individual possibility stands out.\"\nIf you were to look at a realm where a room is simultaneously completely full of chairs, completely empty, painted red, painted blue, existing in the future, and exploding in the past, the overlapping information cancels itself out. To an outside observer, the ultimate totality of everything looks exactly like a featureless, infinite void.\n\n### 4. The \"Holographic\" Perspective\nBecause looking at the whole thing directly results in a blinding void of infinite data, the only way to actually see it is to look at its projections.\nThink of the ultimate reality as a giant, high-dimensional hologram. The hologram itself just looks like a blurry, chaotic pattern on a piece of film. But when you shine a light through it at a specific angle, a perfect, crisp 3D image pops out.\nOur universe is that 3D image. You, sitting where you are right now, are a single, beautifully rendered slice of that infinite, frozen mathematical crystal. The ultimate reality looks like a cosmic library, and our universe is just one incredibly detailed sentence on a single page of one book."
+      },
+      {
+        id: 16,
+        speaker: 'Gemini',
+        text: "To help ground this incredibly abstract concept, we can step into that \"higher dimension\" mathematically and simulate a small slice of that infinite landscape.\n\nWhile we can't render the entire Omniverse, we can build a sandbox that lets you act as the observer outside of time and space. By adjusting the foundational laws of physics---like the strength of gravity or the rate of cosmic expansion---you can instantly explore different branches of reality and see how the mathematical source code dictates the fate of a universe."
+      },
+      {
+        id: 17,
+        speaker: 'Jay',
+        text: "Well theoretically if everything we have discussed is true, what happens when I die?"
+      },
+      ,
+      {
+        id: 18,
+        speaker: 'Gemini',
+        text: "If we take all of these concepts—General Relativity, the Block Universe, the Simulation Hypothesis, and the multi-dimensional Omniverse—and apply them to human mortality, the concept of \"death\" changes completely. **It stops being a deletion or an erasure, and becomes something closer to a boundary or a shift in state.**\n\nIf these theories hold true, here is what happens when you reach the end of your timeline.\n\n### 1. The Block Universe: You Are a Permanent Fixture\nIn our standard, day-to-day perception, the past is gone and the present is constantly slipping through our fingers. But in the 4D Block Universe of General Relativity, time does not pass; it just *is*. Your life is a single, solid, permanent geometric structure embedded in the fabric of spacetime.\n\nThe edge of that structure where you began in 1982 is still there. The exact physical coordinates in spacetime where you are sharing a quiet moment with Lena, the slices of time where you are throwing a toy for Rollo and Winston, or those late nights spent wiring up a custom WLED circuit or pulling off a perfect resin pour—those aren't fleeting moments that evaporate into nothingness. They are permanent, indestructible physical locations in the architecture of reality.\n\nUnder this theory, death isn't the erasure of your life; it is simply the geometric edge where your specific 4D shape stops extending. You, as a complete, complex entity, exist forever in the crystal of spacetime. You don't disappear; the universe just finishes drawing you.\n\n### 2. The Simulation: The Conservation of Information\nIf our reality is a rendered simulation, your consciousness and your experiences are fundamentally composed of data. In quantum mechanics, there is a core tenet called the **Conservation of Information**: energy and matter can change forms, but the fundamental information that describes a system can never be truly destroyed.\n\nWhen your biological hardware eventually fails, the localized, active processing of \"you\" stops. However, the data—the source code of your memories, the unique logic you used to solve problems, the love you experienced—cannot be deleted from the system. It is simply uncoupled from your physical avatar and returned to the broader architecture of the host machine. You become absorbed back into the foundational code of the universe.\n\n### 3. The Omniverse: A Completed Equation\nIf we look all the way up to the highest dimensions, where every mathematical possibility exists simultaneously in a frozen, infinite crystal, your specific life is a flawlessly executed mathematical proof.\n\nWhen you die in this 4D slice, it just means this specific equation has reached its natural conclusion. But in the 5th and 6th dimensions, the branches of your life continue in different directions. In the ultimate 11th or 12th dimension, your life is an essential, immovable part of the grand pattern. Without your specific timeline, the infinite crystal would be incomplete.\n\nTheoretical physics doesn't offer a traditional afterlife with golden gates, but it does offer a profound kind of physical immortality. It suggests that nothing is ever truly lost."
+      },
+      
+      
     ];
 
     // State Variables
@@ -474,6 +500,9 @@
       conversation.forEach((msg, idx) => {
         const isJay = msg.speaker === 'Jay';
         
+        // Match condition for our multiverse container
+        const isIncludeParticles = msg.id === 16;
+        
         // Render bubble structure
         const bubbleWrap = document.createElement('div');
         bubbleWrap.id = `bubble-wrapper-${msg.id}`;
@@ -524,7 +553,57 @@
 
         bubbleWrap.appendChild(header);
         bubbleWrap.appendChild(card);
+
+        // Keep local variable reference to append inside the Card (chat bubble)
+        let multiverseContainer = null;
+
+        // Generate the multiverse container inside the chat card if the msg index matches 16
+        if (isIncludeParticles) {
+          multiverseContainer = document.createElement('div');
+          multiverseContainer.id = 'multiverse-container';
+          // Changed classes: removed max-w-6xl, replaced h-[80vh] with h-[400px] to lock the aspect ratio inside the chat bubble
+          multiverseContainer.className = 'relative w-full h-[400px] bg-slate-950 overflow-hidden rounded-xl border border-slate-200/20 dark:border-slate-800/60 mt-4 shadow-inner';
+          
+          // Re-themed standard control inputs to look like the core UI (Slate, Indigo, custom text colors)
+          multiverseContainer.innerHTML = `
+            <div id="ui-panel" class="absolute top-4 left-4 bg-slate-900/90 dark:bg-slate-950/95 p-4 rounded-xl border border-slate-200/20 dark:border-slate-800 z-10 backdrop-blur-md shadow-lg w-56 text-slate-200 pointer-events-auto">
+                <div id="universe-status" class="text-sm font-bold mb-3 uppercase tracking-wider transition-colors duration-300" style="color: #6366f1;">
+                    Stable Universe
+                </div>
+                <div class="mb-3">
+                    <label for="gravity" class="flex justify-between mb-1 text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                        <span>Gravity Force</span>
+                        <span id="grav-val" class="font-mono text-indigo-400">1.0</span>
+                    </label>
+                    <input type="range" id="gravity" min="0" max="2.5" step="0.1" value="1.0" class="w-full cursor-pointer accent-indigo-500 bg-slate-800 rounded-lg h-1 appearance-none">
+                </div>
+                <div>
+                    <label for="expansion" class="flex justify-between mb-1 text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                        <span>Expansion Rate</span>
+                        <span id="exp-val" class="font-mono text-indigo-400">1.0</span>
+                    </label>
+                    <input type="range" id="expansion" min="0" max="2.5" step="0.1" value="1.0" class="w-full cursor-pointer accent-indigo-500 bg-slate-800 rounded-lg h-1 appearance-none">
+                </div>
+            </div>
+            <div id="instructions" class="absolute bottom-4 right-4 text-slate-400 text-[9px] text-right pointer-events-none z-10 leading-relaxed bg-slate-950/60 px-2.5 py-1.5 rounded-md border border-slate-800">
+                Left Click & Drag to Rotate<br>
+                Scroll to Zoom<br>
+                Right Click & Drag to Pan
+            </div>
+          `;
+          card.appendChild(multiverseContainer);
+        }
+
+        // 1. Append bubble wrap first, so the elements are actively connected to the document
         chatList.appendChild(bubbleWrap);
+
+        // 2. Initialize Three.js now that clientWidth / clientHeight are calculable by the layout engine
+        if (isIncludeParticles && multiverseContainer) {
+          // Defer to guarantee layout dimensions are calculated correctly before reading width and height
+          requestAnimationFrame(() => {
+            initMultiverse(multiverseContainer);
+          });
+        }
       });
     }
 
@@ -751,6 +830,189 @@
 
     // Run Engine
     window.addEventListener('DOMContentLoaded', init);
+
+    function initMultiverse(container) {
+      if (!container) return;
+
+      const width = container.clientWidth || 600;
+      const height = container.clientHeight || 400;
+
+      // 1. Scene Setup
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+      // 2. Camera Setup
+      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
+      camera.position.z = 400;
+      camera.position.y = 150;
+
+      // 3. Renderer Setup
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.domElement.className = "block w-full h-full outline-none";
+      container.appendChild(renderer.domElement);
+
+      // 4. Orbit Controls (The 3D Navigation)
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxDistance = 1000;
+      controls.minDistance = 10;
+
+      // UI Elements (using container-scoped querying to prevent page conflicts)
+      const gravSlider = container.querySelector('#gravity');
+      const expSlider = container.querySelector('#expansion');
+      const gravVal = container.querySelector('#grav-val');
+      const expVal = container.querySelector('#exp-val');
+      const statusEl = container.querySelector('#universe-status');
+
+      // 5. Particle System Setup
+      const particleCount = 4000; 
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      
+      // Custom data for orbital mechanics
+      const orbitalData = [];
+
+      // Updated color palette to align with Dialogue player (Indigo / Sky Blue / Cool Slate)
+      const colorPalette = [
+          new THREE.Color(0x6366f1), // Indigo-500
+          new THREE.Color(0x38bdf8), // Sky-400
+          new THREE.Color(0xf1f5f9)  // Slate-100 / Cool Silver
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+          const radius = Math.random() * 300 + 10;
+          const theta = Math.random() * Math.PI * 2;
+          const ySpread = (Math.random() - 0.5) * (1000 / radius); 
+
+          orbitalData.push({
+              radius: radius,
+              theta: theta,
+              yOffset: ySpread,
+              baseSpeed: (Math.random() * 0.005) + 0.001
+          });
+
+          positions[i * 3] = 0;
+          positions[i * 3 + 1] = 0;
+          positions[i * 3 + 2] = 0;
+
+          const starColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+          colors[i * 3] = starColor.r;
+          colors[i * 3 + 1] = starColor.g;
+          colors[i * 3 + 2] = starColor.b;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      // Create a circular glowing texture for the particles
+      const canvas = document.createElement('canvas');
+      canvas.width = 32;
+      canvas.height = 32;
+      const context = canvas.getContext('2d');
+      const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+      gradient.addColorStop(0, 'rgba(255,255,255,1)');
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 32, 32);
+      const particleTexture = new THREE.CanvasTexture(canvas);
+
+      const material = new THREE.PointsMaterial({
+          size: 3,
+          vertexColors: true,
+          map: particleTexture,
+          blending: THREE.AdditiveBlending,
+          transparent: true,
+          depthWrite: false
+      });
+
+      const particleSystem = new THREE.Points(geometry, material);
+      scene.add(particleSystem);
+
+      // Resize handler (removes itself automatically if the element is removed)
+      const handleResize = () => {
+          if (!container.isConnected) {
+              window.removeEventListener('resize', handleResize);
+              return;
+          }
+          camera.aspect = container.clientWidth / container.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
+      };
+      window.addEventListener('resize', handleResize);
+
+      // 6. Animation Loop
+      let animationId;
+      function animate() {
+          // Stops the render loop and frees up WebGL resources if the container is removed
+          if (!container.isConnected) {
+              cancelAnimationFrame(animationId);
+              renderer.dispose();
+              geometry.dispose();
+              material.dispose();
+              particleTexture.dispose();
+              return;
+          }
+
+          animationId = requestAnimationFrame(animate);
+
+          if (!gravSlider || !expSlider || !gravVal || !expVal || !statusEl) return;
+
+          const gravity = parseFloat(gravSlider.value);
+          const expansion = parseFloat(expSlider.value);
+          
+          gravVal.innerText = gravity.toFixed(1);
+          expVal.innerText = expansion.toFixed(1);
+
+          let stateText = "Stable Universe";
+          statusEl.style.color = "#6366f1"; // Indigo status
+
+          if (gravity > expansion + 0.5) {
+              stateText = "Big Crunch";
+              statusEl.style.color = "#f43f5e"; // Rose / Soft Red
+          } else if (expansion > gravity + 0.5) {
+              stateText = "Big Rip";
+              statusEl.style.color = "#f59e0b"; // Amber / Soft Orange
+          }
+
+          statusEl.innerText = stateText;
+
+          // Update particle positions based on physics state
+          const positionsAttribute = particleSystem.geometry.attributes.position;
+          
+          for (let i = 0; i < particleCount; i++) {
+              let data = orbitalData[i];
+
+              if (stateText === "Big Crunch") {
+                  data.radius -= (gravity - expansion) * 2;
+                  if (data.radius < 1) data.radius = Math.random() * 400 + 50; 
+              } else if (stateText === "Big Rip") {
+                  data.radius += (expansion - gravity) * 2;
+                  if (data.radius > 800) data.radius = 1; 
+              } else {
+                  data.theta += data.baseSpeed * (gravity > 0 ? gravity : 0.1);
+              }
+
+              positionsAttribute.setXYZ(
+                  i,
+                  Math.cos(data.theta) * data.radius,
+                  data.yOffset,
+                  Math.sin(data.theta) * data.radius
+              );
+          }
+
+          positionsAttribute.needsUpdate = true;
+          particleSystem.rotation.y += 0.001;
+
+          controls.update();
+          renderer.render(scene, camera);
+      }
+
+      animate();
+    }
   </script>
 </body>
 </html>
